@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Year 11 Word Challenge</title>
+  <meta name="description" content="Practise your weekly vocabulary through definition matching, sentence choices and spelling.">
+  <link rel="stylesheet" href="styles.css">
+  <script src="data.js" defer></script>
+  <script src="game.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <main>
+    <h1>Year 11 Word Challenge</h1>
+    <p class="intro">Choose the week you have reached. Test every word from Week 2 up to that week in three rounds.</p>
+
+    <section id="home" aria-labelledby="home-title">
+      <h2 id="home-title">Choose your week</h2>
+      <label for="week-select">Week</label>
+      <select id="week-select">
+        <option value="2">Week 2 — Week 2 words</option><option value="3">Week 3 — Weeks 2–3 words</option>
+        <option value="4">Week 4 — Weeks 2–4 words</option><option value="5">Week 5 — Weeks 2–5 words</option>
+        <option value="6">Week 6 — Weeks 2–6 words</option><option value="7">Week 7 — Weeks 2–7 words</option>
+        <option value="8">Week 8 — Weeks 2–8 words</option><option value="9">Week 9 — Weeks 2–9 words</option>
+      </select>
+      <p id="week-summary" role="status" aria-live="polite"></p>
+      <ol>
+        <li><strong>Definition match:</strong> choose the word that matches the meaning.</li>
+        <li><strong>Sentence choice:</strong> choose the word that fills the gap.</li>
+        <li><strong>Spelling:</strong> read the clue and type the word from memory.</li>
+      </ol>
+      <p>Each word appears once in each round. One point per correct answer. Use Australian spelling.</p>
+      <button id="start" type="button">Start challenge</button>
+    </section>
+
+    <section id="play" hidden aria-labelledby="round-title">
+      <div class="game-top">
+        <p id="progress"></p>
+        <button id="change-week" type="button" class="secondary">Choose another week</button>
+      </div>
+      <h2 id="round-title" tabindex="-1"></h2>
+      <p id="instructions"></p>
+      <p id="question-count" class="small"></p>
+      <form id="answer-form">
+        <fieldset>
+          <legend id="prompt"></legend>
+          <p id="word-class" class="small" hidden></p>
+          <div id="choices"></div>
+          <div id="spelling-box" hidden>
+            <label for="spelling">Type the word</label>
+            <input id="spelling" type="text" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" maxlength="40" inputmode="text">
+          </div>
+        </fieldset>
+        <button id="check" type="submit" disabled>Check answer</button>
+      </form>
+      <div id="feedback" role="status" aria-live="polite" aria-atomic="true" hidden></div>
+      <button id="next" type="button" hidden>Next question</button>
+    </section>
+
+    <section id="results" hidden aria-labelledby="results-title">
+      <h2 id="results-title" tabindex="-1">Challenge complete</h2>
+      <p id="total-score" class="score"></p>
+      <table>
+        <caption>Your scores by round</caption>
+        <thead><tr><th scope="col">Round</th><th scope="col">Score</th></tr></thead>
+        <tbody id="round-scores"></tbody>
+      </table>
+      <div id="review"></div>
+      <div class="actions">
+        <button id="play-again" type="button">Play this week again</button>
+        <button id="back-home" type="button" class="secondary">Choose another week</button>
+      </div>
+    </section>
+    <noscript><p>This game needs JavaScript to run.</p></noscript>
+  </main>
+</body>
+</html>
