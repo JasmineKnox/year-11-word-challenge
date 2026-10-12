@@ -11,6 +11,7 @@ test('all eight weeks contain the agreed five words and usable prompts', () => {
   for (const words of Object.values(bank)) {
     assert.equal(words.length, 5);
     for (const item of words) {
+      assert.equal(item.word,item.word.toLowerCase(),'Vocabulary words must be lowercase');
       assert.equal((item.sentence.match(/______/g)||[]).length, 1);
       assert.ok(item.definition.length > 10);
       assert.ok(['adjective','adverb','noun','verb'].includes(item.partOfSpeech));
@@ -111,7 +112,7 @@ test('spelling requires exact letters and Australian spelling', () => {
   session.next();
   while (!session.completed) {
     const word=session.current.word;
-    session.submit(word === 'Legitimise' ? 'Legitimize' : word === 'Marginalise' ? 'Marginalize' : word);
+    session.submit(word === 'legitimise' ? 'legitimize' : word === 'marginalise' ? 'marginalize' : word);
     session.next();
   }
   assert.ok(session.summary().score < session.total);

@@ -30,6 +30,8 @@
   function renderQuestion() {
     const question = session.current;
     $('progress').textContent = `Week ${session.week} · Score ${session.score} / ${session.total}`;
+    $('question-progress').max = session.total;
+    $('question-progress').value = session.index;
     $('round-title').textContent = `Round ${question.round + 1}: ${WordGame.roundNames[question.round]}`;
     $('instructions').textContent = directions[question.round];
     $('question-count').textContent = `Question ${question.position + 1} of ${session.roundSize} · Overall ${session.index + 1} of ${session.total}`;
@@ -44,6 +46,7 @@
     $('check').disabled = true;
     $('feedback').hidden = true;
     $('feedback').replaceChildren();
+    $('feedback').className = '';
     $('next').hidden = true;
     if (question.round < 2) {
       question.options.forEach((word, i) => {
@@ -66,6 +69,7 @@
     const value = question.round === 2 ? $('spelling').value : selected?.value;
     if (!value || !value.trim()) return;
     const answer = session.submit(value);
+    $('question-progress').value = session.index + 1;
     $('check').disabled = true;
     $('spelling').disabled = true;
     document.querySelectorAll('input[name="word"]').forEach(input => { input.disabled = true; });
@@ -76,6 +80,7 @@
     $('feedback').append(element('p', `The word is ${answer.word.toLowerCase()}. ${answer.definition}`));
     if (question.round === 1) $('feedback').append(element('p', answer.sentence.replace('______', answer.word.toLowerCase())));
     $('feedback').hidden = false;
+    $('feedback').className = answer.correct ? 'correct' : 'incorrect';
     $('progress').textContent = `Week ${session.week} · Score ${session.score} / ${session.total}`;
     $('next').textContent = session.index === session.total - 1 ? 'See results' : question.position === session.roundSize - 1 ? `Start round ${question.round + 2}` : 'Next question';
     $('next').hidden = false;

@@ -1,6 +1,6 @@
 # Year 11 Word Challenge
 
-Tier 2 vocabulary practice for Year 11. Plain working prototype for the Weeks 2–9 word-of-the-day programme.
+Tier 2 vocabulary practice for Year 11, using the Mrs Knox Teaches English visual identity.
 
 ## Play
 
@@ -45,7 +45,9 @@ Publishing reference: [GitHub’s official guide to configuring a Pages publishi
 
 `data.js` contains all eight weeks. Each entry has a word, word class, definition and sentence. Keep five entries per week and one `______` gap in each sentence. The correct answer must be the exact word in the entry, without changing its grammatical form.
 
-`game.js` handles questions, checking and scoring. `app.js` handles the screens. `styles.css` is deliberately simple so the game can be reviewed before visual styling is added.
+`game.js` handles questions, checking and scoring. `app.js` handles the screens. `styles.css` supplies the deep-green and sage palette, faint graph paper, clear reading areas and responsive layout. Vocabulary words use lowercase throughout the game; student answers still ignore capitalisation.
+
+The supplied English logo is stored in `assets/`. League Spartan headings and Karla body text are bundled under `assets/fonts/`, with their SIL Open Font Licences. Keep this folder with the game files when downloading or copying the site.
 
 ## Check the game logic
 
@@ -57,4 +59,4 @@ node --test tests/*.test.cjs
 
 ## Scope of this prototype
 
-The content, round sequence, scoring and screen interactions have automated checks. A full browser preview was unavailable in the build environment. Test the downloaded `index.html` on the devices your students will use before the classroom launch.
+The content, round sequence, scoring and screen interactions have automated checks. A full browser preview was unavailable in the build environment. Check the game on the devices your students will use before the classroom launch.

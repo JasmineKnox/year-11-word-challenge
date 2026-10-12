@@ -58,10 +58,13 @@ for(const week of Object.keys(bank)) {
       const correct=pool.find(w=>w[field]===nodes.prompt.textContent);
       assert.ok(correct,'Screen must show a prompt from the included weeks');
       assert.equal(nodes.check.disabled,true);
+      assert.equal(nodes['question-progress'].max,total);
+      assert.equal(nodes['question-progress'].value,i);
       if(round<2) {
         assert.equal(nodes['spelling-box'].hidden,true);
         const choices=document.querySelectorAll();
         assert.equal(choices.length,5);
+        choices.forEach(input=>assert.equal(input.value,input.value.toLowerCase()));
         const input=choices.find(n=>n.value===correct.word);
         input.checked=true;input.fire('change');
       } else {
@@ -74,6 +77,8 @@ for(const week of Object.keys(bank)) {
       assert.equal(nodes.check.disabled,false);
       nodes['answer-form'].fire('submit');
       assert.match(nodes.feedback.textContent,/Correct\./);
+      assert.equal(nodes['question-progress'].value,i+1);
+      assert.equal(nodes.feedback.className,'correct');
       assert.equal(nodes.check.disabled,true);
       assert.equal(nodes.next.hidden,false);
       assert.match(nodes.progress.textContent,new RegExp(`Score ${i+1} / ${total}`));

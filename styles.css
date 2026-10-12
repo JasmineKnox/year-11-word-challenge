@@ -1,37 +1,104 @@
+@font-face { font-family: "League Spartan"; src: url("assets/fonts/LeagueSpartan.ttf") format("truetype"); font-weight: 100 900; font-display: swap; }
+@font-face { font-family: "Karla"; src: url("assets/fonts/Karla.ttf") format("truetype"); font-weight: 200 800; font-display: swap; }
+:root { --green: #2F4841; --dark-green: #233631; --sage: #A6B5A9; --pale-sage: #EDF0EE; --ink: #202322; --paper: #FAFAF7; --line: #CFD8D1; }
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
-body { margin: 0; background: white; color: #111; font: 18px/1.5 Arial, sans-serif; }
-main { width: min(100% - 32px, 800px); margin: 32px auto 60px; }
-h1 { font-size: 32px; line-height: 1.2; }
-h2 { font-size: 25px; line-height: 1.3; margin-top: 0; }
-.intro { margin-bottom: 28px; }
-section { border: 1px solid #222; padding: 24px; }
+body {
+  margin: 0; color: var(--ink); font: 20px/1.5 "Karla", Arial, sans-serif;
+  background-color: var(--paper);
+  background-image: linear-gradient(rgba(47,72,65,.055) 1px, transparent 1px), linear-gradient(90deg, rgba(47,72,65,.055) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+main { width: min(100% - 48px, 960px); margin: 40px auto 32px; }
+.site-header { display: flex; gap: 32px; align-items: center; margin-bottom: 32px; }
+.brand-logo { width: 148px; height: 148px; object-fit: contain; flex-shrink: 0; }
+.hero-copy { min-width: 0; }
+h1, h2, h3 { font-family: "League Spartan", Arial, sans-serif; color: var(--green); }
+h1 { font-weight: 800; font-size: clamp(38px, 5.6vw, 64px); line-height: 1.02; margin: 0 0 12px; letter-spacing: -.8px; }
+h1 span { display: block; }
+h2 { font-size: 36px; line-height: 1.15; font-weight: 750; margin: 0 0 20px; }
+h3 { font-size: 27px; line-height: 1.2; font-weight: 700; margin: 0 0 18px; }
+.intro { max-width: 620px; margin: 0; font-size: 21px; }
+section { background: white; border: 3px double var(--sage); border-left: 6px solid var(--green); padding: 36px; }
+.home-layout { display: grid; grid-template-columns: 1fr 1.15fr; gap: 44px; }
+.week-picker { min-width: 0; }
+.round-overview { border-left: 1px solid var(--line); padding-left: 32px; }
 label { display: block; }
+.week-picker > label { font-weight: 700; margin-bottom: 8px; }
 select, input, button { font: inherit; }
-select, input[type="text"] { border: 1px solid #333; background: white; color: #111; padding: 10px 12px; width: 100%; max-width: 420px; }
-input[type="text"] { margin: 6px 0 16px; }
-button { padding: 10px 16px; background: #111; color: white; border: 1px solid #111; cursor: pointer; min-height: 44px; }
-button.secondary { color: #111; background: white; }
-button:disabled { background: #ddd; color: #555; border-color: #aaa; cursor: default; }
-button:focus-visible, input:focus-visible, select:focus-visible, h2:focus-visible { outline: 3px solid #111; outline-offset: 4px; }
-ol { padding-left: 24px; } li { margin: 8px 0; }
-.game-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 24px; }
-.game-top p { margin: 0; }
-.game-top button { font-size: 16px; }
-.small { font-size: 16px; }
-fieldset { border: 0; padding: 0; margin: 0 0 20px; min-width: 0; }
-legend { font-size: 23px; font-weight: bold; line-height: 1.4; padding: 0; margin-bottom: 18px; width: 100%; }
-.choice { display: flex; align-items: center; gap: 12px; padding: 12px; border: 1px solid #777; margin-bottom: 8px; cursor: pointer; overflow-wrap: anywhere; }
-.choice:has(input:checked) { border: 2px solid #111; padding: 11px; background: #eee; }
+select, input[type="text"] { border: 1px solid var(--green); background-color: white; color: var(--ink); padding: 12px 14px; width: 100%; min-width: 0; border-radius: 3px; }
+select { font-weight: 650; min-height: 54px; }
+#week-summary { font-size: 19px; margin: 18px 0 24px; line-height: 1.5; }
+input[type="text"] { margin: 8px 0 16px; max-width: 520px; font-size: 28px; letter-spacing: .4px; border-bottom: 3px solid var(--green); min-height: 64px; }
+button { padding: 12px 22px; background: var(--green); color: white; border: 1px solid var(--green); border-radius: 3px; cursor: pointer; min-height: 52px; font-size: 20px; font-weight: 700; }
+button:hover:enabled { background: var(--dark-green); border-color: var(--dark-green); }
+button.secondary { color: var(--green); background: white; }
+button.secondary:hover:enabled { background: var(--pale-sage); }
+button:disabled { background: #EDF0EE; color: #626B65; border-color: #C6CEC8; cursor: default; }
+button:focus-visible, input:focus-visible, select:focus-visible, h2:focus-visible { outline: 3px solid var(--dark-green); outline-offset: 4px; }
+.round-list { padding-left: 25px; margin: 0; }
+.round-list li { padding-left: 8px; margin-bottom: 16px; }
+.round-list li:last-child { margin-bottom: 0; }
+.round-list li::marker { color: var(--green); font-weight: 800; }
+.round-list strong { display: block; color: var(--green); font-size: 21px; }
+.home-note { margin: 30px 0 0; padding-top: 22px; border-top: 1px solid var(--line); font-size: 18px; }
+.game-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 16px; }
+.game-top p { margin: 0; color: var(--green); font-weight: 700; }
+.game-top button { font-size: 17px; min-height: 44px; padding: 9px 14px; }
+progress { display: block; width: 100%; height: 7px; border: 0; background: var(--pale-sage); color: var(--green); accent-color: var(--green); margin-bottom: 28px; }
+progress::-webkit-progress-bar { background: var(--pale-sage); }
+progress::-webkit-progress-value { background: var(--green); }
+progress::-moz-progress-bar { background: var(--green); }
+#instructions { margin: 0 0 12px; }
+.small { font-size: 17px; color: #505C55; }
+#question-count { margin: 0 0 24px; }
+fieldset { border: 0; padding: 0; margin: 0 0 24px; min-width: 0; }
+legend { font-size: 27px; font-weight: 700; line-height: 1.4; padding: 0; margin-bottom: 24px; width: 100%; }
+#choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.choice { display: flex; align-items: center; gap: 14px; padding: 15px 18px; border: 1px solid var(--line); border-radius: 3px; cursor: pointer; overflow-wrap: anywhere; min-height: 62px; font-size: 24px; line-height: 1.25; text-transform: none; }
+.choice:last-child:nth-child(odd) { grid-column: 1 / -1; }
+.choice:hover:has(input:enabled) { background: var(--pale-sage); border-color: var(--sage); }
+.choice:has(input:checked) { border: 2px solid var(--green); padding: 14px 17px; background: var(--pale-sage); }
 .choice:has(input:disabled) { cursor: default; }
-.choice input { width: 20px; height: 20px; margin: 0; flex-shrink: 0; accent-color: #111; }
-#feedback { padding: 16px; border: 2px solid #111; margin: 24px 0 16px; overflow-wrap: anywhere; }
-#feedback p { margin: 0 0 8px; } #feedback p:last-child { margin-bottom: 0; }
-.score { font-size: 26px; font-weight: bold; }
-table { width: 100%; border-collapse: collapse; margin-bottom: 28px; }
-caption { text-align: left; font-weight: bold; margin-bottom: 8px; }
-th, td { border: 1px solid #555; padding: 10px 12px; text-align: left; }
-.review-item { border-top: 1px solid #888; padding: 12px 0; }
+.choice input { width: 22px; height: 22px; margin: 0; flex-shrink: 0; accent-color: var(--green); }
+#feedback { padding: 20px 24px; border-left: 4px solid var(--green); background: var(--pale-sage); margin: 26px 0 20px; overflow-wrap: anywhere; }
+#feedback.incorrect { border-color: #65716A; background: #F3F4F3; }
+#feedback p { margin: 0 0 8px; }
+#feedback p:last-child { margin-bottom: 0; }
+#feedback strong { font-size: 23px; }
+.score { font-family: "League Spartan", Arial, sans-serif; font-size: clamp(30px, 4vw, 44px); line-height: 1.2; font-weight: 750; color: var(--green); margin: 18px 0 28px; }
+table { width: 100%; border-collapse: collapse; margin-bottom: 32px; }
+caption { text-align: left; font-weight: 700; margin-bottom: 12px; }
+th, td { border: 1px solid var(--line); padding: 12px 16px; text-align: left; }
+th { background: var(--pale-sage); color: var(--green); }
+.review-item { border-top: 1px solid var(--line); padding: 18px 0; }
 .review-item p { margin: 4px 0; }
-.actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
-@media (max-width: 480px) { main { margin-top: 20px; } section { padding: 18px; } h1 { font-size: 28px; } legend { font-size: 21px; } }
+.review-item strong { font-size: 23px; color: var(--green); }
+.actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 28px; }
+.site-footer { color: #505C55; text-align: right; font-size: 15px; margin-top: 18px; }
+@media (max-width: 720px) {
+  main { width: min(100% - 28px, 600px); margin-top: 24px; }
+  .site-header { gap: 18px; margin-bottom: 24px; }
+  .brand-logo { width: 94px; height: 94px; }
+  h1 { font-size: 39px; }
+  .intro { font-size: 19px; }
+  section { padding: 25px; }
+  .home-layout { grid-template-columns: 1fr; gap: 28px; }
+  .round-overview { border-left: 0; border-top: 1px solid var(--line); padding: 25px 0 0; }
+  #start { width: 100%; }
+  h2 { font-size: 32px; }
+}
+@media (max-width: 480px) {
+  .site-header { align-items: flex-start; gap: 14px; }
+  .brand-logo { width: 72px; height: 72px; }
+  h1 { font-size: 33px; letter-spacing: -.4px; }
+  .intro { font-size: 18px; }
+  section { padding: 21px 18px; border-left-width: 4px; }
+  #choices { grid-template-columns: 1fr; }
+  legend { font-size: 24px; }
+  .choice { font-size: 23px; }
+  .game-top { align-items: flex-start; }
+  #feedback { padding: 18px; }
+  th, td { padding: 10px 12px; }
+  .actions button { width: 100%; }
+}
