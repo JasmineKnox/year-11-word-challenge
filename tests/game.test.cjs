@@ -21,19 +21,20 @@ test('all eight weeks contain the agreed five words and usable prompts', () => {
 });
 
 for (const week of Object.keys(bank)) {
-  test(`week ${week}: all words from weeks 2–${week} occur once per round`, () => {
+  test(`week ${week}: current words plus five revision words per round`, () => {
     const session = createSession(bank, week);
     const expected = Object.entries(bank).filter(([w]) => Number(w) <= Number(week)).flatMap(([,words]) => words);
-    const count = expected.length;
-    assert.equal(count, (Number(week)-1)*5);
-    assert.equal(session.wordCount, count);
+    const count = Number(week)===2 ? 5 : 10;
+    assert.equal(session.roundSize, count);
     assert.equal(session.total, count*3);
     const seen = [[],[],[]];
+    const options = [[],[],[]];
     for (let i = 0; i < count*3; i++) {
       const q = session.current;
       assert.equal(q.round, Math.floor(i/count));
       assert.equal(q.position, i%count);
       seen[q.round].push(q.word);
+      options[q.round].push(...q.options);
       if (q.round < 2) {
         assert.equal(q.options.length,5);
         assert.equal(new Set(q.options).size,5);
@@ -51,7 +52,24 @@ for (const week of Object.keys(bank)) {
     assert.deepEqual(result.rounds.map(r => r.score), [count,count,count]);
     assert.deepEqual(result.rounds.map(r => r.total), [count,count,count]);
     assert.deepEqual(result.missed, []);
-    seen.forEach(words => assert.deepEqual(words.sort(),expected.map(w => w.word).sort()));
+    const current=bank[week].map(w=>w.word);
+    const revision=seen.map(words=>words.filter(w=>!current.includes(w)));
+    seen.forEach((words,round)=>{
+      assert.equal(new Set(words).size,count,'No repeated questions within a round');
+      current.forEach(word=>assert.equal(words.filter(w=>w===word).length,1,'Every current-week word once per round'));
+      assert.equal(revision[round].length,Number(week)===2?0:5);
+      options[round].forEach(word=>assert.ok(words.includes(word),'Distractors stay within that round’s selected words'));
+    });
+    if(Number(week)===3) revision.forEach(words=>assert.deepEqual(words.sort(),bank[2].map(w=>w.word).sort()));
+    if(Number(week)===4){
+      const w2=bank[2].map(w=>w.word);
+      const w3=bank[3].map(w=>w.word);
+      assert.deepEqual(revision.map(words=>words.filter(w=>w2.includes(w)).length),[3,2,2]);
+      assert.deepEqual(revision.map(words=>words.filter(w=>w3.includes(w)).length),[2,3,3]);
+      assert.equal(new Set([...revision[0],...revision[1]]).size,10,'Cover all earlier words in first two rounds');
+    }
+    if(Number(week)>=5) assert.equal(new Set(revision.flat()).size,15,'Revision words never repeat across rounds');
+    assert.equal(result.wordCount,Number(week)===2?5:Number(week)===3?10:Number(week)===4?15:20);
   });
 }
 
@@ -86,7 +104,7 @@ test('empty answers, skipped questions and unknown weeks are rejected', () => {
 
 test('spelling requires exact letters and Australian spelling', () => {
   const session = createSession(bank, 4, () => 0.5);
-  for (let i=0;i<session.wordCount*2;i++) { session.submit(session.current.word); session.next(); }
+  for (let i=0;i<session.roundSize*2;i++) { session.submit(session.current.word); session.next(); }
   const q = session.current;
   assert.equal(q.round, 2);
   assert.equal(session.submit(q.word+'x').correct, false);

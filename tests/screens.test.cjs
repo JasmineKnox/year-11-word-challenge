@@ -41,9 +41,10 @@ for(const week of Object.keys(bank)) {
   test(`week ${week}: screen flow, answers, score, results and replay`,()=>{
     const {nodes,document}=loadScreen(week);
     const pool=Object.entries(bank).filter(([w])=>Number(w)<=Number(week)).flatMap(([,words])=>words);
-    const count=pool.length;
+    const count=Number(week)===2?5:10;
     const total=count*3;
-    assert.ok(nodes['week-summary'].textContent.includes(`${count} words`));
+    assert.ok(nodes['week-summary'].textContent.includes(`${count} questions per round`));
+    if(Number(week)>2) assert.ok(nodes['week-summary'].textContent.includes('5 current-week words + 5 earlier words'));
     assert.ok(nodes['week-summary'].textContent.includes(`${total} questions in total`));
     nodes.start.fire('click');
     assert.equal(nodes.home.hidden,true);
@@ -95,7 +96,7 @@ for(const week of Object.keys(bank)) {
     assert.equal(nodes.home.hidden,false);
     nodes['week-select'].value=week==='9'?'2':'9';
     nodes['week-select'].fire('change');
-    assert.ok(nodes['week-summary'].textContent.includes(nodes['week-select'].value==='9'?'40 words':'5 words'));
+    assert.ok(nodes['week-summary'].textContent.includes(nodes['week-select'].value==='9'?'10 questions per round':'5 questions per round'));
     nodes.start.fire('click');
     assert.match(nodes.progress.textContent,new RegExp(`Week ${nodes['week-select'].value}`));
   });

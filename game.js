@@ -26,9 +26,29 @@
   }
   function createSession(bank, week, random = Math.random) {
     const selectedWeek = Number(week);
-    const words = wordsThroughWeek(bank, selectedWeek);
+    const eligible = wordsThroughWeek(bank, selectedWeek);
+    const currentWords = bank[selectedWeek];
+    const previousWords = eligible.slice(0, -currentWords.length);
+    let revisionRounds;
+    if (selectedWeek === 2) revisionRounds = [[], [], []];
+    else if (selectedWeek === 3) revisionRounds = [previousWords, previousWords, previousWords];
+    else if (selectedWeek === 4) {
+      const week2 = shuffle(bank[2], random);
+      const week3 = shuffle(bank[3], random);
+      revisionRounds = [
+        [...week2.slice(0, 3), ...week3.slice(0, 2)],
+        [...week2.slice(3), ...week3.slice(2)],
+        [...shuffle(bank[2], random).slice(0, 2), ...shuffle(bank[3], random).slice(0, 3)],
+      ];
+    } else {
+      // Fifteen different revision words: five reserved for each round.
+      const revision = shuffle(previousWords, random).slice(0, 15);
+      revisionRounds = [revision.slice(0, 5), revision.slice(5, 10), revision.slice(10, 15)];
+    }
+    const roundSize = selectedWeek === 2 ? 5 : 10;
     const questions = [];
     for (let round = 0; round < 3; round++) {
+      const words = [...currentWords, ...revisionRounds[round]];
       shuffle(words, random).forEach((entry, position) => {
         const distractors = shuffle(words.filter(w => w.word !== entry.word), random).slice(0, 4).map(w => w.word);
         questions.push({ ...entry, round, position, options: round < 2 ? shuffle([entry.word, ...distractors], random) : [] });
@@ -37,9 +57,11 @@
     let index = 0;
     let checked = false;
     const answers = [];
+    const wordCount = new Set(questions.map(q => q.word)).size;
     return {
       week: selectedWeek,
-      wordCount: words.length,
+      wordCount,
+      roundSize,
       total: questions.length,
       get index() { return index; },
       get checked() { return checked; },
@@ -66,10 +88,10 @@
         if (index !== questions.length) throw new Error('Finish all three rounds first.');
         return {
           week: selectedWeek,
-          wordCount: words.length,
+          wordCount,
           total: questions.length,
           score: answers.filter(a => a.correct).length,
-          rounds: roundNames.map((name, round) => ({ name, score: answers.filter(a => a.round === round && a.correct).length, total: words.length })),
+          rounds: roundNames.map((name, round) => ({ name, score: answers.filter(a => a.round === round && a.correct).length, total: roundSize })),
           missed: answers.filter(a => !a.correct),
         };
       },

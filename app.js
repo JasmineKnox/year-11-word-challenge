@@ -23,16 +23,16 @@
   }
   function updateWeekSummary() {
     const week = Number($('week-select').value);
-    const count = WordGame.wordsThroughWeek(WORD_WEEKS, week).length;
-    const range = week === 2 ? 'Week 2' : `Weeks 2–${week}`;
-    $('week-summary').textContent = `${range}: ${count} words · ${count} questions per round · ${count * 3} questions in total.`;
+    const count = week === 2 ? 5 : 10;
+    const words = week === 2 ? '5 current-week words' : '5 current-week words + 5 earlier words in each round';
+    $('week-summary').textContent = `Week ${week}: ${words} · ${count} questions per round · ${count * 3} questions in total.`;
   }
   function renderQuestion() {
     const question = session.current;
     $('progress').textContent = `Week ${session.week} · Score ${session.score} / ${session.total}`;
     $('round-title').textContent = `Round ${question.round + 1}: ${WordGame.roundNames[question.round]}`;
     $('instructions').textContent = directions[question.round];
-    $('question-count').textContent = `Question ${question.position + 1} of ${session.wordCount} · Overall ${session.index + 1} of ${session.total}`;
+    $('question-count').textContent = `Question ${question.position + 1} of ${session.roundSize} · Overall ${session.index + 1} of ${session.total}`;
     $('prompt').textContent = question.round === 1 ? question.sentence : question.definition;
     $('choices').replaceChildren();
     $('choices').hidden = question.round === 2;
@@ -77,7 +77,7 @@
     if (question.round === 1) $('feedback').append(element('p', answer.sentence.replace('______', answer.word.toLowerCase())));
     $('feedback').hidden = false;
     $('progress').textContent = `Week ${session.week} · Score ${session.score} / ${session.total}`;
-    $('next').textContent = session.index === session.total - 1 ? 'See results' : question.position === session.wordCount - 1 ? `Start round ${question.round + 2}` : 'Next question';
+    $('next').textContent = session.index === session.total - 1 ? 'See results' : question.position === session.roundSize - 1 ? `Start round ${question.round + 2}` : 'Next question';
     $('next').hidden = false;
     $('next').focus();
   }
@@ -98,7 +98,7 @@
       $('round-scores').append(row);
     });
     $('review').replaceChildren();
-    if (!result.missed.length) $('review').append(element('p', `You matched, used and spelled all ${result.wordCount} words correctly.`));
+    if (!result.missed.length) $('review').append(element('p', `You answered all ${result.total} questions correctly across the three rounds.`));
     else {
       $('review').append(element('h3', 'Review your missed answers'));
       result.missed.forEach(answer => {
